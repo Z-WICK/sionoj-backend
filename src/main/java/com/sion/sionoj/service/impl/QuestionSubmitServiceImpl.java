@@ -1,20 +1,33 @@
 package com.sion.sionoj.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sion.sionoj.common.ErrorCode;
+import com.sion.sionoj.constant.CommonConstant;
 import com.sion.sionoj.exception.BusinessException;
 import com.sion.sionoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
+import com.sion.sionoj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.sion.sionoj.model.entity.Question;
 import com.sion.sionoj.model.entity.QuestionSubmit;
 import com.sion.sionoj.model.entity.User;
 import com.sion.sionoj.model.enums.QuestionSubmitLanguageEnum;
 import com.sion.sionoj.model.enums.QuestionSubmitStatusEnum;
+import com.sion.sionoj.model.vo.QuestionSubmitVO;
 import com.sion.sionoj.service.QuestionService;
 import com.sion.sionoj.service.QuestionSubmitService;
 import com.sion.sionoj.mapper.QuestionSubmitMapper;
+import com.sion.sionoj.service.UserService;
+import com.sion.sionoj.utils.SqlUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author wick
@@ -27,6 +40,9 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
 
     @Resource
     private QuestionService questionService;
+
+    @Resource
+    private UserService userService;
 
     /**
      * 提交题目
@@ -68,7 +84,62 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         return questionSubmit.getId();
 
     }
+    
+    
+     /**
+     * 获取查询包装类(用户根据哪些字段查询,根据前端传来的请求对象,得到mybatis框架支持的QueryWrapper 类
+     *
+     * @param questionSubmitQueryRequest
+     * @return
+     */
+    @Override
+    public QueryWrapper<QuestionSubmit> getQueryWrapper(QuestionSubmitQueryRequest questionSubmitQueryRequest) {
+        QueryWrapper<QuestionSubmit> queryWrapper = new QueryWrapper<>();
+        if (questionSubmitQueryRequest == null) {
+            return queryWrapper;
+        }
+        String language = questionSubmitQueryRequest.getLanguage();
+        Integer status = questionSubmitQueryRequest.getStatus();
+        Long questionId = questionSubmitQueryRequest.getQuestionId();
+        Long userId = questionSubmitQueryRequest.getUserId();
+        String sortOrder = questionSubmitQueryRequest.getSortOrder();
+        String sortField = questionSubmitQueryRequest.getSortField();
 
+        queryWrapper.eq(StringUtils.isNotBlank(language), "language", language);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(questionId), "questionId", questionId);
+        queryWrapper.eq(QuestionSubmitStatusEnum.getEnumByValue(status) != null, "status", status);
+        queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
+                sortField);
+        return queryWrapper;
+    }
+
+
+
+    @Override
+    public QuestionSubmitVO getQuestionSubmitVO(QuestionSubmit questionSubmit, User loginUser) {
+        QuestionSubmitVO questionSubmitVO = QuestionSubmitVO.objToVo(questionSubmit);
+        // 脱敏: 仅本人喝管理员能看见自己(提交 userId 和 登录用户id 不同) 提交的代码
+        Long userId = loginUser.getId();
+        if(userId != questionSubmit.getUserId() && userService.isAdmin(loginUser)){
+            questionSubmitVO.setCode(null);
+        }
+        return questionSubmitVO;
+    }
+
+    @Override
+    public Page<QuestionSubmitVO> getQuestionSubmitVOPage(Page<QuestionSubmit> questionSubmitPage, User loginUser) {
+        List<QuestionSubmit> questionSubmitList = questionSubmitPage.getRecords();
+        Page<QuestionSubmitVO> questionSubmitVOPage = new Page<>(questionSubmitPage.getCurrent(), questionSubmitPage.getSize(), questionSubmitPage.getTotal());
+        if (CollectionUtils.isEmpty(questionSubmitList)) {
+            return questionSubmitVOPage;
+        }
+        List<QuestionSubmitVO> questionSubmitVOList = questionSubmitList.stream()
+                .map(questionSubmit -> getQuestionSubmitVO(questionSubmit, loginUser))
+                .collect(Collectors.toList());
+        questionSubmitVOPage.setRecords(questionSubmitVOList);
+        return questionSubmitVOPage;
+    }
 
 }
 
