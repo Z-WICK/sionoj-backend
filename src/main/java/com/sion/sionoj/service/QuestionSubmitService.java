@@ -1,7 +1,9 @@
 package com.sion.sionoj.service;
 
+import com.sion.sionoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
 import com.sion.sionoj.model.entity.QuestionSubmit;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sion.sionoj.model.entity.User;
 
 /**
 * @author wick
@@ -9,5 +11,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-10-27 11:10:05
 */
 public interface QuestionSubmitService extends IService<QuestionSubmit> {
+    
+    /**
+     * 题目提交
+     *
+     * @param questionSubmitAddRequest 题目提交信息
+     * @param loginUser
+     * @return
+     */
+    long doQuestionSubmit(QuestionSubmitAddRequest questionSubmitAddRequest, User loginUser);
+
 
 }
