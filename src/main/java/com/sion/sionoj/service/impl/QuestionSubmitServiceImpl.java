@@ -121,7 +121,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         QuestionSubmitVO questionSubmitVO = QuestionSubmitVO.objToVo(questionSubmit);
         // 脱敏: 仅本人喝管理员能看见自己(提交 userId 和 登录用户id 不同) 提交的代码
         Long userId = loginUser.getId();
-        if(userId != questionSubmit.getUserId() && userService.isAdmin(loginUser)){
+        if(userId != questionSubmit.getUserId() && !userService.isAdmin(loginUser)){
             questionSubmitVO.setCode(null);
         }
         return questionSubmitVO;
