@@ -1,4 +1,4 @@
-package com.sion.sionoj.model.dto.questionsubmit;
+package com.sion.sionoj.judge.codesandbox.model;
 
 import lombok.Data;
 

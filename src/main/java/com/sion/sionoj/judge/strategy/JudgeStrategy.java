@@ -1,6 +1,6 @@
 package com.sion.sionoj.judge.strategy;
 
-import com.sion.sionoj.model.dto.questionsubmit.JudgeInfo;
+import com.sion.sionoj.judge.codesandbox.model.JudgeInfo;
 
 public interface JudgeStrategy {
 

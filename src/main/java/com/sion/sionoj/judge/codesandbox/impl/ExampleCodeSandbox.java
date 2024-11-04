@@ -3,7 +3,7 @@ package com.sion.sionoj.judge.codesandbox.impl;
 import com.sion.sionoj.judge.codesandbox.CodeSandbox;
 import com.sion.sionoj.judge.codesandbox.model.ExecuteCodeRequest;
 import com.sion.sionoj.judge.codesandbox.model.ExecuteCodeResponse;
-import com.sion.sionoj.model.dto.questionsubmit.JudgeInfo;
+import com.sion.sionoj.judge.codesandbox.model.JudgeInfo;
 import com.sion.sionoj.model.enums.JudgeInfoMessageEnum;
 import com.sion.sionoj.model.enums.QuestionSubmitStatusEnum;
 

@@ -11,6 +11,7 @@ import com.sion.sionoj.common.ResultUtils;
 import com.sion.sionoj.constant.UserConstant;
 import com.sion.sionoj.exception.BusinessException;
 import com.sion.sionoj.exception.ThrowUtils;
+import com.sion.sionoj.model.dto.question.JudgeConfig;
 import com.sion.sionoj.model.dto.question.*;
 import com.sion.sionoj.model.entity.Question;
 import com.sion.sionoj.model.entity.User;

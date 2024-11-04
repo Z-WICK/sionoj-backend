@@ -10,7 +10,7 @@ import com.sion.sionoj.judge.codesandbox.model.ExecuteCodeRequest;
 import com.sion.sionoj.judge.codesandbox.model.ExecuteCodeResponse;
 import com.sion.sionoj.judge.strategy.JudgeContext;
 import com.sion.sionoj.model.dto.question.JudgeCase;
-import com.sion.sionoj.model.dto.questionsubmit.JudgeInfo;
+import com.sion.sionoj.judge.codesandbox.model.JudgeInfo;
 import com.sion.sionoj.model.entity.Question;
 import com.sion.sionoj.model.entity.QuestionSubmit;
 import com.sion.sionoj.model.enums.QuestionSubmitStatusEnum;

@@ -1,10 +1,9 @@
 package com.sion.sionoj.judge.strategy;
 
 import cn.hutool.json.JSONUtil;
-import com.sion.sionoj.judge.JudgeService;
 import com.sion.sionoj.model.dto.question.JudgeCase;
 import com.sion.sionoj.model.dto.question.JudgeConfig;
-import com.sion.sionoj.model.dto.questionsubmit.JudgeInfo;
+import com.sion.sionoj.judge.codesandbox.model.JudgeInfo;
 import com.sion.sionoj.model.entity.Question;
 import com.sion.sionoj.model.enums.JudgeInfoMessageEnum;
 
