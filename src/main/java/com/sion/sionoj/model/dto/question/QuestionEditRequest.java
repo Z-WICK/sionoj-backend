@@ -19,7 +19,7 @@ public class QuestionEditRequest implements Serializable {
     /**
      * 标题
      */
-    private List<String> title;
+    private String title;
 
     /**
      * 内容
