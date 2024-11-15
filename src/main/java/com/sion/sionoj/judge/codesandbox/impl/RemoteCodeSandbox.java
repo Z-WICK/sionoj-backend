@@ -26,6 +26,7 @@ public class RemoteCodeSandbox implements CodeSandbox {
     @Override
     public ExecuteCodeResponse executeCode(ExecuteCodeRequest executeCodeRequest) {
         System.out.println("远程代码沙箱");
+        // todo URl解耦
         String url = "http://localhost:8090/executeCode";
         String json = JSONUtil.toJsonStr(executeCodeRequest);
         String responseStr = HttpUtil.createPost(url)
@@ -37,6 +38,8 @@ public class RemoteCodeSandbox implements CodeSandbox {
         if (StrUtil.isBlank(responseStr)){
             throw new BusinessException(ErrorCode.API_REQUEST_ERROR,"executeCode remoteSandbox error, message =" + responseStr);
         }
+        System.out.println(responseStr);
+
         return JSONUtil.toBean(responseStr,ExecuteCodeResponse.class);
 
     }

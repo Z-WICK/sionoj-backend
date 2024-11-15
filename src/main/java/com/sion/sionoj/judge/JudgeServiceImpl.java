@@ -88,7 +88,9 @@ public class JudgeServiceImpl implements JudgeService {
                 .inputList(inputList)
                 .build();
         ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
+
         List<String> outputList = executeCodeResponse.getOutputList();
+
         // 5）根据沙箱的执行结果，设置题目的判题状态和信息
         JudgeContext judgeContext = new JudgeContext();
         judgeContext.setJudgeInfo(executeCodeResponse.getJudgeInfo());
@@ -98,6 +100,7 @@ public class JudgeServiceImpl implements JudgeService {
         judgeContext.setQuestion(question);
         judgeContext.setQuestionSubmit(questionSubmit);
 
+        //这里比对代码沙箱执行完的结果，与预期的是否一致
         JudgeInfo judgeInfo = judgeManager.doJudge(judgeContext);
 
         //6）更新题目的判题状态和信息(数据库
